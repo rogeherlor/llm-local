@@ -1,0 +1,26 @@
+# Use the official Ubuntu 22.04 image
+FROM ubuntu:22.04
+
+# Set environment variables to avoid interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update the package list and install necessary packages
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    net-tools \
+    x11-apps \
+    python3-tk \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the requirements.txt file into the Docker image
+COPY ./model/requirements.txt /app/requirements.txt
+
+# Install the dependencies listed in requirements.txt
+RUN pip3 install -r /app/requirements.txt --extra-index-url https://download.pytorch.org/whl/cu121
+
+# Copy the entire project into the Docker image
+COPY ./model /app
+
+# Set the working directory
+WORKDIR /app

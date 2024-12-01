@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  gpt-2:
+    image: rhlorite/llama-2
+    build:
+      context: .
+      dockerfile: model/Dockerfile.llama-2
+    container_name: llama-2
+    environment:
+      - DISPLAY=host.docker.internal:0  # Use host IP for X11 forwarding
+    volumes:
+      - ./model:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix  # Share X11 socket for GUI apps
+    runtime: nvidia  # Enable GPU access using the NVIDIA runtime
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    stdin_open: true
+    tty: true
+    ports:
+      - "8080:8080"  # Expose port 8080 for web server
+      - "8081:8081"  # Expose port 8081 for web server matplotlib
+      - "8888:8888"  # Expose port 8888 for Jupyter Notebook
+    command: /bin/bash -c "tail -f /dev/null"  # Keep the container running
+    networks:
+      custom_network:
+        ipv4_address: 172.28.0.10  # Fixed IP address for this container
+
+networks:
+  custom_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.28.0.0/16"  # Define a custom subnet

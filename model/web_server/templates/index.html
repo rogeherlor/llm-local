@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLaMA 2 Text Generator</title>
+</head>
+<body>
+    <h1>Text Generator</h1>
+    <form method="POST">
+        <label for="user_input">Enter your text:</label><br>
+        <textarea id="user_input" name="user_input" rows="4" cols="50"></textarea><br><br>
+        <button type="submit">Generate</button>
+    </form>
+    {% if input_text and output_text %}
+        <h2>Input:</h2>
+        <p>{{ input_text }}</p>
+        <h2>Generated Output:</h2>
+        <p>{{ output_text }}</p>
+    {% endif %}
+</body>
+</html>

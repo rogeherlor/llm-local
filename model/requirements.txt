@@ -1,0 +1,9 @@
+torch==2.5.1+cu121
+numpy
+transformers
+sentencepiece
+protobuf
+flask
+notebook
+matplotlib
+tornado
